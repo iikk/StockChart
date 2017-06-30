@@ -24,6 +24,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
+        android:id="@+id/scale"
+        android:text="测试scale"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
         android:id="@+id/restart"
         android:text="重启"
         android:layout_width="match_parent"

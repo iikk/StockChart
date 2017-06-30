@@ -40,6 +40,7 @@ public class MinuteView extends RelativeLayout {
     private TrendData mTrendData;
     private float mUp_px;
     private float mPreclose_px;
+    private boolean mIsPreclosePxSetted;
     private float mDown_px;
     private Paint mPaint;
     private String mLast_px;
@@ -65,6 +66,7 @@ public class MinuteView extends RelativeLayout {
     private int mAvgTextColor;
     private int mLeftPadding;
     private int mRightPadding;
+    private boolean needInvalidate;
 
 
     public MinuteView(@NonNull Context context) {
@@ -92,6 +94,8 @@ public class MinuteView extends RelativeLayout {
         mRightPadding = dp2px(0);
         mMainChildSpace = dp2px(20);
         mTextSpace = dp2px(8);
+        mIsPreclosePxSetted = false;
+        needInvalidate = false;
 
         mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
 
@@ -286,6 +290,14 @@ public class MinuteView extends RelativeLayout {
         }
     }
 
+    public void setPreclosePx(RealData realData) {
+        mIsPreclosePxSetted = true;
+        mPreclose_px = Float.parseFloat(realData.getData().getSnapshot().getProd_code().get(8));
+        if (needInvalidate) {
+            invalidate();
+        }
+    }
+
     public void setTrendData(TrendData data) {
         mTrendData = data;
         int size = mTrendData.getData().getTrend().getProd_code().size();
@@ -295,7 +307,11 @@ public class MinuteView extends RelativeLayout {
         }
 
         handleData();
-        invalidate();
+        if (mIsPreclosePxSetted) {
+            invalidate();
+        } else {
+            needInvalidate = true;
+        }
     }
 
     private void handleData() {
@@ -337,7 +353,7 @@ public class MinuteView extends RelativeLayout {
         MinuteAmountsTrend = amountsTrend;
         max_amount = lastAmount;
 
-        mPreclose_px = (float) mTrendData.getData().getTrend().getPreclose_px().getProd_code();
+        //mPreclose_px = (float) mTrendData.getData().getTrend().getPreclose_px().getProd_code();
         float gap = Math.max(Math.abs(max_px - mPreclose_px), Math.abs(min_px - mPreclose_px));
         mDown_px = mPreclose_px - gap;
         mUp_px = mPreclose_px + gap;

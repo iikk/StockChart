@@ -41,7 +41,7 @@ public class KlineActivity extends Activity {
         init();
     }
 
-    public static void lanuch(Context context, String code) {
+    public static void launch(Context context, String code) {
         Intent intent = new Intent(context, KlineActivity.class);
         intent.putExtra("code", code);
         context.startActivity(intent);

@@ -16,7 +16,7 @@ public abstract class ScrollAndScaleView extends RelativeLayout implements Scale
     private float mScaleX = 1;
     private float mScaleOldX = 1;
     private float mScaleMinX = 0.5f;
-    private float mScaleMaxX = 2;
+    private float mScaleMaxX = 3;
     private boolean mScaleEnable;
 
     public ScrollAndScaleView(Context context) {

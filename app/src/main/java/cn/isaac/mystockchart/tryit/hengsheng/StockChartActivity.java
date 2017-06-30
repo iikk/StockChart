@@ -91,7 +91,7 @@ public class StockChartActivity extends Activity {
         });
     }
 
-    public static void lanuch(Context context, String code) {
+    public static void launch(Context context, String code) {
         Intent intent = new Intent(context, StockChartActivity.class);
         intent.putExtra("code", code);
         context.startActivity(intent);
@@ -215,6 +215,9 @@ public class StockChartActivity extends Activity {
         grpTickView.setGrpData(realData);
         if (moreParamView!=null) {
             moreParamView.setParamData(realData);
+        }
+        if (mMinuteView!=null) {
+            mMinuteView.setPreclosePx(realData);
         }
     }
 

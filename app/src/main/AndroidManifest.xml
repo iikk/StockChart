@@ -20,6 +20,7 @@
         <activity android:name=".tryit.KlineActivity"/>
         <activity android:name=".tryit.MinuteActivity"/>
         <activity android:name=".tryit.hengsheng.StockChartActivity"/>
+        <activity android:name=".test.TestScaleActivity"/>
     </application>
 
 </manifest>

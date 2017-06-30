@@ -1,7 +1,6 @@
 package cn.isaac.mystockchart.tryit.view;
 
 import android.content.Context;
-import android.drm.DrmRights;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,12 +8,9 @@ import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import cn.isaac.mystockchart.chartlib.impl.IKChartView;
 
 /**
  * Created by RaoWei on 2017/6/26 14:12.

@@ -17,6 +17,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cn.isaac.mystockchart.R;
+import cn.isaac.mystockchart.tryit.entity.RealData;
 import cn.isaac.mystockchart.tryit.entity.TokenData;
 import cn.isaac.mystockchart.tryit.entity.TrendData;
 import cn.isaac.mystockchart.tryit.view.MinuteView;
@@ -47,7 +48,7 @@ public class MinuteActivity extends Activity {
     }
 
 
-    public static void lanuch(Context context, String code) {
+    public static void launch(Context context, String code) {
         Intent intent = new Intent(context, MinuteActivity.class);
         intent.putExtra("code", code);
         context.startActivity(intent);
@@ -90,23 +91,27 @@ public class MinuteActivity extends Activity {
                         HashMap<String, String> map = new HashMap<>();
 
                         //请求real
-                        /*map.clear();
+                        map.clear();
                         map.put("access_token", hscloudToken);
-                        map.put("en_prod_code", "002305.SZ");
-                        map.put("fields", "preclose_px,up_px,down_px");
+                        map.put("en_prod_code", mCode);
+                        map.put("fields", "open_px,high_px,business_balance,low_px,turnover_ratio,vol_ratio,preclose_px," +
+                                "amplitude,eps,business_amount_in,business_amount_out,entrust_rate,circulation_value,market_value," +
+                                "pre_rate,up_px,down_px,dyn_pb_rate,bid_grp,offer_grp,last_px,px_change,px_change_rate,entrust_rate,pe_rate");
                         Response realResponse = OkGo.get(Const.url_real).params(map).execute();
                         if (realResponse.isSuccessful() && realResponse.code() == 200) {
-                            String realBody = realResponse.body().string().replace("002305.SZ", "prod_code");
+                            String realBody = realResponse.body().string().replace(mCode, "prod_code");
                             final RealData realData = gson.fromJson(realBody, RealData.class);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mCanvasView.setRealData(realData);
+                                    if (mMinuteView!=null) {
+                                        mMinuteView.setPreclosePx(realData);
+                                    }
                                 }
                             });
                         } else {
                             Log.e("canvas： real ==>>", "请求失败");
-                        }*/
+                        }
 
                         //请求trend
                         map.clear();

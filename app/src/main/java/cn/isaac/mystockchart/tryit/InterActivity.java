@@ -6,13 +6,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
 
 import cn.isaac.mystockchart.R;
+import cn.isaac.mystockchart.test.TestScaleActivity;
 import cn.isaac.mystockchart.tryit.hengsheng.StockChartActivity;
 
 /**
@@ -33,21 +32,27 @@ public class InterActivity extends Activity {
              @Override
              public void onClick(View v) {
                 mCodeText = code.getText().toString();
-                 MinuteActivity.lanuch(InterActivity.this, mCodeText);
+                 MinuteActivity.launch(InterActivity.this, mCodeText);
              }
          });
         findViewById(R.id.kline).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCodeText = code.getText().toString();
-                KlineActivity.lanuch(InterActivity.this, mCodeText);
+                KlineActivity.launch(InterActivity.this, mCodeText);
             }
         });
         findViewById(R.id.all).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCodeText = code.getText().toString();
-                StockChartActivity.lanuch(InterActivity.this, mCodeText);
+                StockChartActivity.launch(InterActivity.this, mCodeText);
+            }
+        });
+        findViewById(R.id.scale).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TestScaleActivity.launch(InterActivity.this);
             }
         });
         findViewById(R.id.restart).setOnClickListener(new View.OnClickListener() {
