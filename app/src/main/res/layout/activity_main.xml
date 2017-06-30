@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/title_view"
+        android:fitsSystemWindows="true"
+        android:background="@color/chart_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:minHeight="40dp"
+            android:text="demo"
+            android:gravity="center"
+            android:textColor="@color/chart_white"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <View
+        android:background="#494949"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>\
+    <LinearLayout
+        android:id="@+id/ll_status"
+        android:orientation="horizontal"
+        android:background="#30343C"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
+        <RelativeLayout
+            android:layout_weight="0.7"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_centerHorizontal="true"
+                android:text="000001.SS"
+                android:textColor="@color/chart_green"
+                android:textSize="24sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tv_percent"
+                android:layout_below="@id/tv_price"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="3dp"
+                android:text="0.51  +0.04%"
+                android:textColor="@color/chart_green"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_weight="0.5"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <TextView
+                android:text="最高 xxx"
+                android:textColor="@color/chart_white"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="最低 xxx"
+                android:textColor="@color/chart_white"
+                android:textSize="12sp"
+                android:layout_marginTop="13dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="昨收 xxx"
+                android:textColor="@color/chart_white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开盘 xxx"
+                android:textColor="@color/chart_white"
+                android:textSize="12sp"
+                android:layout_marginTop="13dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#494949" />
+
+    <cn.isaac.mystockchart.chartExample.chart.KChartView
+        android:id="@+id/kchart_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></cn.isaac.mystockchart.chartExample.chart.KChartView>
+</LinearLayout>
