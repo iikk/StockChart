@@ -5,7 +5,8 @@ package cn.isaac.mystockchart.tryit;
  */
 
 public interface Const {
-    String url_token = "http://192.168.90.206:8080/v1/hscloud/token";
+    //String url_token = "http://192.168.90.206:8080/v1/hscloud/token";
+    String url_token = "http://api.niuke.cn/v1/hscloud/token";
     String url_trend = "https://open.hscloud.cn/quote/v1/trend";
     String url_kline = "https://open.hscloud.cn/quote/v1/kline";
     String url_real = "https://open.hscloud.cn/quote/v1/real";

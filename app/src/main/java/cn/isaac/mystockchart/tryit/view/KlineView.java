@@ -18,7 +18,7 @@ import cn.isaac.mystockchart.tryit.tools.CanvasTools;
  * Created by RaoWei on 2017/6/20 14:21.
  */
 
-public class KlineView extends  ScrollAndScaleView{
+public class KlineView extends RelativeLayout{
     private int mHeight;
     private int mWidth;
     private int mTopPadding;
@@ -528,9 +528,4 @@ public class KlineView extends  ScrollAndScaleView{
         return (int)(dp * getContext().getResources().getDisplayMetrics().density + 0.5f);
     }
 
-    @Override
-    protected void onScaleChanged(float scale, float oldScale) {
-
-        super.onScaleChanged(scale, oldScale);
-    }
 }

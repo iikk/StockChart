@@ -268,6 +268,9 @@ public class GrpTickView extends RelativeLayout {
     public void setGrpData(RealData data) {
         if (data!=null) {
             mGrpList = data.getData().getSnapshot().getProd_code();
+            if (mGrpList.get(19).length()<3) {
+                return;
+            }
             mBidGrpList = CanvasTools.formateGrp(mGrpList.get(19));
             mOfferGrpList = CanvasTools.formateGrp(mGrpList.get(20));
 
