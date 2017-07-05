@@ -1,6 +1,7 @@
 package cn.isaac.mystockchart.tryit;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
@@ -13,9 +14,11 @@ import java.util.logging.Level;
  */
 
 public class MyApp extends Application {
+    public static Context context;
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
         initOkHttp();
     }
 
