@@ -34,13 +34,12 @@
                 android:id="@+id/minute_view"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="5"/>
+                android:layout_weight="1"/>
 
             <cn.isaac.mystockchart.tryit.view.GrpTickView
                 android:id="@+id/grp_tick_view"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"/>
+                android:layout_width="100dp"
+                android:layout_height="match_parent"/>
         </LinearLayout>
             <cn.isaac.mystockchart.tryit.view.KlineView
                 android:visibility="gone"

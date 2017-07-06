@@ -19,6 +19,7 @@ import android.widget.Space;
 
 import java.util.Random;
 
+import cn.isaac.mystockchart.R;
 import cn.isaac.mystockchart.tryit.tools.ToastTools;
 
 /**
@@ -222,6 +223,8 @@ public class RulerView extends RelativeLayout {
             canvas.drawLine(mSpace*startIndex + lastX,0,mSpace*startIndex + lastX,mHeigh,mPaint);
             canvas.drawText("当前x轴："+(startIndex+lastX/mSpace),getStartX(startIndex) + lastX,20,mPaint);
         }
+
+        //ToastTools.showShort(getContext().getString(R.string.test));
     }
 
     private float getStartX(int index) {

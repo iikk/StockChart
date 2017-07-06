@@ -19,7 +19,7 @@
         </activity>
         <activity android:name=".tryit.KlineActivity"/>
         <activity android:name=".tryit.MinuteActivity"/>
-        <activity android:name=".tryit.hengsheng.StockChartActivity"/>
+        <activity android:name=".tryit.hengsheng.StockChartActivity" android:screenOrientation="sensor"/>
         <activity android:name=".test.TestScaleActivity"/>
     </application>
 

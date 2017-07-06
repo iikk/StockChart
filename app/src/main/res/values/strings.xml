@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyStockChart</string>
+    <string name="test">测试string</string>
 </resources>
