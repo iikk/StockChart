@@ -1,6 +1,5 @@
 package cn.isaac.mystockchart.test.view;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,6 +7,7 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -15,7 +15,7 @@ import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 import android.widget.OverScroller;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.Space;
 
 import java.util.Random;
 
@@ -29,6 +29,8 @@ public class RulerView extends RelativeLayout {
     private final static int HANDLER_LONG_PRESSED = 1;
     private final static int LONG_PRESSED_CODE = 1;
     private final static int NOT_LONG_PRESSED_CODE = 2;
+    private final static int CAN_SCROLL_CODE = 3;
+    private final static int CAN_NOT_SCROLL_CODE = 4;
     private int mHeigh;
     private int mWidth;
     private Paint mPaint;
@@ -57,9 +59,16 @@ public class RulerView extends RelativeLayout {
     private int minDistance;
     private int VelocityUnit;
     private boolean mIsLongPressed;
+    private boolean mIsMultipleTouch;
+    private boolean mCanScroll;
     private Handler mHandler;
     private int longPressedInterval;
-    private ScaleGestureDetector mGestureDetector;
+    private int canScrollInterval;
+    private ScaleGestureDetector mScaleDetector;
+    private float mScaleOldX;
+    private float mScaleX;
+    private float mScaleMinX;
+    private float mScaleMaxX;
 
     public RulerView(Context context) {
         super(context);
@@ -96,21 +105,38 @@ public class RulerView extends RelativeLayout {
         stopIndex = 500;
         VelocityUnit = 500;
         startIndex = stopIndex - count;
+        mScaleMaxX = 2f;
+        mScaleMinX = 0.5f;
+        mScaleX = 1;
+        mIsMultipleTouch = false;
+        mIsLongPressed = false;
+        mCanScroll = true;
 
         maxDistance = Integer.MAX_VALUE;
         minDistance = Integer.MIN_VALUE;
 
         mScroller = new OverScroller(getContext());
         mRandom = new Random();
-        mGestureDetector = new ScaleGestureDetector(getContext(), new ScaleGestureDetector.OnScaleGestureListener() {
+        mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleGestureDetector.OnScaleGestureListener() {
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
-                return false;
+                mScaleOldX = mScaleX;
+                mScaleX *= detector.getScaleFactor();
+                if (mScaleX < mScaleMinX) {
+                    mScaleX = mScaleMinX;
+                } else if (mScaleX > mScaleMaxX) {
+                    mScaleX = mScaleMaxX;
+                } else {
+                    ToastTools.showShort("scale:"+ mScaleX);
+                    //正常放大缩小
+                    invalidate();
+                }
+                return true;
             }
 
             @Override
             public boolean onScaleBegin(ScaleGestureDetector detector) {
-                return false;
+                return true;
             }
 
             @Override
@@ -131,11 +157,18 @@ public class RulerView extends RelativeLayout {
                         mIsLongPressed = false;
                         invalidate();
                         break;
+                    case CAN_SCROLL_CODE:
+                        mCanScroll = true;
+                        break;
+                    case CAN_NOT_SCROLL_CODE:
+                        mCanScroll = false;
+                        break;
                 }
                 return false;
             }
         });
         longPressedInterval = 500;
+        canScrollInterval = 800;
 
 
         ViewConfiguration configuration = ViewConfiguration.get(getContext());
@@ -158,18 +191,34 @@ public class RulerView extends RelativeLayout {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawColor(mBlackColor);
+        canvas.save();
+        //canvas.scale(mScaleX,1);
+        if (mIsMultipleTouch) {
+            mSpace = mWidth / 20;
+            mSpace = (int) (mSpace*mScaleX);
+            //if (mSpace == 0) {
+            //    mSpace = 1;
+            //
+            //}
+            //if (mSpace >= mWidth/2) {
+            //    mSpace = mWidth/2;
+            //}
+            count = mWidth / mSpace;
+        }
+        //Log.e("RulerView", "mSpace:" +mSpace + ", scale:"+ mScaleX);
         canvas.drawLine(mScrollX, mHeigh/2, mWidth + mScrollX, mHeigh/2, mPaint);
         startIndex = mScrollX/mSpace;
         stopIndex = startIndex + count;
-        //canvas.translate(mScrollX, 0);
+        //canvas.translate(mScrollX*mScaleX, 0);
         for (int i = startIndex; i <= stopIndex; i++) {
             canvas.drawLine(getStartX(i) ,mHeigh/2, getStartX(i), mHeigh/2 - heigh, mPaint);
             canvas.drawText(String.valueOf(i), getStartX(i), mHeigh/2 + 20, mPaint);
         }
+        canvas.restore();
         canvas.drawText("mScrollX:" + mScrollX,mScrollX,mHeigh-20,mPaint);
 
         //长按画坐标轴
-        if (mIsLongPressed) {
+        if (mIsLongPressed && !mIsMultipleTouch) {
             canvas.drawLine(mSpace*startIndex + lastX,0,mSpace*startIndex + lastX,mHeigh,mPaint);
             canvas.drawText("当前x轴："+(startIndex+lastX/mSpace),getStartX(startIndex) + lastX,20,mPaint);
         }
@@ -187,7 +236,9 @@ public class RulerView extends RelativeLayout {
     float downY;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        initVelocityTracker(event);
+        if (mCanScroll) {
+            initVelocityTracker(event);
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (!mScroller.isFinished()) {
@@ -196,28 +247,35 @@ public class RulerView extends RelativeLayout {
                 downX = event.getX();
                 lastX = event.getX();
                 downY = event.getY();
-               sendPrepareLongPressed();
+                sendPrepareLongPressed();
                 break;
             case MotionEvent.ACTION_MOVE:
                 moveX = event.getX();
                 moveY = event.getY();
 
-                if (mIsLongPressed) {
-                    ToastTools.showShort("长按：lastX=" + lastX);
-                    invalidate();
-                } else {
-                    if (Math.abs(moveX - downX) > mTouchSlop || Math.abs(moveY - downY) > mTouchSlop) {
-                        cancelLongPressed();
+                if (!mIsMultipleTouch) {
+                    if (mIsLongPressed) {
+                        ToastTools.showShort("长按：lastX=" + lastX);
+                        cancelCanScroll();
+                        invalidate();
+                    } else {
+                        if (Math.abs(moveX - downX) > mTouchSlop || Math.abs(moveY - downY) > mTouchSlop) {
+                            cancelLongPressed();
+                        }
+                        sendCanScroll();
+                        scrollBy((int) (lastX - moveX), 0);
+                        mScrollX = getScrollX();
                     }
-                    scrollBy((int) (lastX-moveX), 0);
-                    mScrollX = getScrollX();
+                } else {
+                    cancelLongPressed();
+                    cancelCanScroll();
                 }
 
                 lastX = moveX;
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                if (!mIsLongPressed) {
+                if (mCanScroll) {
                     mVelocityTracker.computeCurrentVelocity(VelocityUnit, mMaxFlingSpeed);
                     int velocityX = -(int) mVelocityTracker.getXVelocity();
                     if (Math.abs(velocityX) > mMinFlingSpeed) {
@@ -229,12 +287,26 @@ public class RulerView extends RelativeLayout {
                 cancelLongPressed();
                 break;
         }
-        mGestureDetector.onTouchEvent(event);
+        mIsMultipleTouch = event.getPointerCount()>1;
+        if (mIsMultipleTouch) {
+            cancelCanScroll();
+            mScaleDetector.onTouchEvent(event);
+        }
         return true;
     }
 
+    private void sendCanScroll() {
+        mHandler.sendEmptyMessageDelayed(CAN_SCROLL_CODE, canScrollInterval);
+    }
+
+
+    private void cancelCanScroll() {
+        mHandler.removeMessages(CAN_SCROLL_CODE);
+        mHandler.sendEmptyMessage(CAN_NOT_SCROLL_CODE);
+    }
+
     private void sendPrepareLongPressed() {
-        mHandler.sendEmptyMessageDelayed(LONG_PRESSED_CODE, longPressedInterval);
+        mHandler.sendEmptyMessageDelayed(LONG_PRESSED_CODE, canScrollInterval);
     }
 
     private void cancelLongPressed() {
